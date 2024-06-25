@@ -22,5 +22,7 @@
         </main>
 
         @livewireScripts
+
+        @stack('alpine_scripts')
     </body>
 </html>
