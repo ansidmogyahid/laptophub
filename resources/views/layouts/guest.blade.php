@@ -24,5 +24,11 @@
         @livewireScripts
 
         @stack('alpine_scripts')
+
+        <script>
+            window.addEventListener('notify', event => {
+                alert('The message: ' + event.detail);
+            })
+        </script>
     </body>
 </html>

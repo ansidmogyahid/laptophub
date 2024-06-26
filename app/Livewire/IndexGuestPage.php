@@ -16,12 +16,22 @@ class IndexGuestPage extends Component
 
     public array $selectedBrands = [];
 
+    public string $layout = 'grid';
+
     protected function queryString()
     {
         return [
             'search' => ['as' => 'q', 'except' => ''],
-            'selectedBrands' => ['as' => 'brand_id']
+            'selectedBrands' => ['as' => 'visibleDatas', 'except' => []],
+            'layout' => ['as' => 'layoutView', 'except' => '']
         ];
+    }
+
+    public function updatedLayout($value)
+    {
+        if(in_array($value, ['list', 'grid'])){
+            $this->layout = $value;
+        }
     }
 
     public function updatedSelectedBrands($property, $value)
@@ -38,7 +48,24 @@ class IndexGuestPage extends Component
     }
     public function addToCart()
     {
-        dd("Add to Cart");
+        $messages = [
+            'A blessing in disguise',
+            'Bite the bullet',
+            'Call it a day',
+            'Easy does it',
+            'Make a long story short',
+            'Miss the boat',
+            'To get bent out of shape',
+            'Birds of a feather flock together',
+            "Don't cry over spilt milk",
+            'Good things come',
+            'Live and learn',
+            'Once in a blue moon',
+            'Spill the beans',
+        ];
+
+
+        $this->notify($messages[array_rand($messages)]);
     }
 
     public function mount()

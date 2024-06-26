@@ -18,23 +18,40 @@
     <div class="flex-1 p-5">
 
         <div class="flex items-center justify-between">
-            <input type="text" wire:model.live="search" placeholder="Search product" class="mb-2">
+
+            <div class="flex items-center mb-2">
+                <input type="text" wire:model.live="search" placeholder="Search product">
+
+                <div class="flex items-center space-x-2 ml-2">
+                    <x-input.radiobox id="default-radio-1" name="layout" value="list" radioIcon :showRadioBox="false" wire:model.live="layout">
+                        <x-slot:content> <x-heroicon-o-queue-list class="h-10" /> </x-slot:content>
+                    </x-input.radiobox>
+
+                    <x-input.radiobox id="default-radio-2" name="layout" value="grid" :showRadioBox="false"  wire:model.live="layout">
+                        <x-slot:content> <x-heroicon-o-view-columns class="h-10" /> </x-slot:content>
+                    </x-input.radiobox>
+                </div>
+            </div>
 
             <div class="relative">
-                <span class="absolute font-semibold text-red-500 -top-2 -right-2">0</span>
-                <x-heroicon-o-shopping-cart class="h-7" />
+                <button>
+                    <span class="absolute font-semibold text-red-500 -top-2 -right-2">0</span>
+                    <x-heroicon-o-shopping-cart class="h-7" />
+                </button>
             </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid gap-4 {{ $layout == 'list' ? 'grid-cols-3' : 'grid-cols-4' }}" >
             @forelse($products as $product)
                 <form wire:submit="addToCart">
-                    <div class="inline-block p-3 border">
-                        <img src="https://p4-ofp.static.pub/ShareResource/na/products/yoga/400x300/lenovo-loq-15inch.png" alt="">
-                        <h3 class="font-semibold">{{ $product->name }}</h3>
-                        <h4>${{ $product->price }}</h4>
+                    <div class="p-3 border {{ $layout == 'list' ? 'flex' : '' }}">
+                        <img class="h-40" src="https://p4-ofp.static.pub/ShareResource/na/products/yoga/400x300/lenovo-loq-15inch.png" alt="">
+                        <div>
+                            <h3 class="font-semibold">{{ $product->name }}</h3>
+                            <h4>${{ $product->price }}</h4>
 
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 transition-colors text-white py-1.5 rounded-md">Add to Cart</button>
+                            <button type="submit" class="w-full px-5 bg-indigo-600 hover:bg-indigo-500 transition-colors text-white py-1.5 rounded-md">Add to Cart</button>
+                        </div>
                     </div>
                 </form>
             @empty
