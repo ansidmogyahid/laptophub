@@ -1,4 +1,4 @@
-<button type="{{ $type }}" class="w-full px-5 bg-indigo-600 hover:bg-indigo-500 transition-colors text-white py-1.5 rounded-md">
+<button type="{{ $type }}" {{ $attributes->merge(['class' => $getButtonClass()])->except(['color', 'size']) }}>
     @isset($title)
         {{ $title }}
     @else
