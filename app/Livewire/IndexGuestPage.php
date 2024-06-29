@@ -57,22 +57,18 @@ class IndexGuestPage extends Component
     public function getProducts()
     {
         return Product::where('name', 'LIKE', "%{$this->search}%" ?? '')
-            ->when($this->selectedBrands, function ($query){
-                return $query->whereIn('brand_id', $this->selectedBrands);
-            })->get();
+            ->when($this->selectedBrands, fn ($query) => $query->whereIn('brand_id', $this->selectedBrands))
+            ->when($this->productTypes, fn ($query) => $query->whereIn('product_type_id', $this->productTypes))
+            ->get();
     }
-    public function addToCart(int $productId)
+    public function addToCart(int $productId): void
     {
         Cart::create([
             'user_id' => 1,
             'product_id' => $productId
         ]);
 
-        Toaster::info("Added to Cart");
-    }
-
-    public function mount()
-    {
+        Toaster::info("Added to Cart Successfully");
     }
 
     public function getFilters(): array
