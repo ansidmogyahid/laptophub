@@ -21,6 +21,8 @@
             {{ $slot }}
         </main>
 
+        <x-toaster-hub /> <!-- 👈 -->
+
         @livewireScripts
 
         @stack('alpine_scripts')
