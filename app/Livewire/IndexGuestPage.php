@@ -3,11 +3,14 @@
 namespace App\Livewire;
 
 use App\Models\Brand;
+use App\Models\Cart;
 use App\Models\Product;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\Url;
+use App\Models\ProductType;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Masmerise\Toaster\Toaster;
 
 #[Layout('layouts.guest')]
 class IndexGuestPage extends Component
@@ -15,16 +18,28 @@ class IndexGuestPage extends Component
     public string $search = '';
 
     public array $selectedBrands = [];
+    public array $productTypes = [];
 
     public string $layout = 'grid';
+
 
     protected function queryString()
     {
         return [
             'search' => ['as' => 'q', 'except' => ''],
-            'selectedBrands' => ['as' => 'visibleDatas', 'except' => []],
+            'selectedBrands' => ['as' => 'brand', 'except' => []],
+            'productTypes' => ['as' => 'type', 'except' => []],
             'layout' => ['as' => 'layoutView', 'except' => '']
         ];
+    }
+
+    public function clearFilters()
+    {
+        $this->search = '';
+        $this->selectedBrands = [];
+        $this->layout = 'grid';
+
+        dd($this->selectedBrands);
     }
 
     public function updatedLayout($value)
@@ -46,36 +61,41 @@ class IndexGuestPage extends Component
                 return $query->whereIn('brand_id', $this->selectedBrands);
             })->get();
     }
-    public function addToCart()
+    public function addToCart(int $productId)
     {
-        $messages = [
-            'A blessing in disguise',
-            'Bite the bullet',
-            'Call it a day',
-            'Easy does it',
-            'Make a long story short',
-            'Miss the boat',
-            'To get bent out of shape',
-            'Birds of a feather flock together',
-            "Don't cry over spilt milk",
-            'Good things come',
-            'Live and learn',
-            'Once in a blue moon',
-            'Spill the beans',
-        ];
+        Cart::create([
+            'user_id' => 1,
+            'product_id' => $productId
+        ]);
 
-
-        $this->notify($messages[array_rand($messages)]);
+        Toaster::info("Added to Cart");
     }
 
     public function mount()
     {
     }
+
+    public function getFilters(): array
+    {
+        return [
+            "Brand" => [ // filter header
+                'livewireModel' => 'selectedBrands', // livewire model
+                'modelFilters' => Brand::select('id', 'name')->withCount('products')->get() // filters per filter category
+            ],
+            "Product Types" => [
+                'livewireModel' => 'productTypes',
+                'modelFilters' => ProductType::select('id', 'name')->withCount('products')->get()
+            ],
+        ];
+    }
+
     public function render()
     {
         return view('livewire.index-guest-page', [
-            'brands' => Brand::all(),
-            'products' => $this->getProducts()
+            'filters' => $this->getFilters(),
+            'products' => $this->getProducts(),
+            'cart' => Cart::all(),
+            'wishlist' => 0,
         ]);
     }
 }
