@@ -16,13 +16,15 @@
 <details {{ $open ? 'open' : '' }} {{ $attributes->merge(['class' => 'w-full cursor-pointer']) }}>
     <summary class="list-none cursor-pointer flex py-2 items-center justify-between">
         <div class="flex items-center">
-            <h4 class="font-semibold">
-                @isset($dropdownTitle)
-                    {{ $dropdownTitle }}
-                @else
-                    {{ $dropdownTitle }}
-                @endisset
-            </h4>
+            <div class="flex items-center">
+                <h4 class="font-semibold">
+                    @isset($dropdownTitle)
+                        {{ $dropdownTitle }}
+                    @else
+                        {{ $dropdownTitle }}
+                    @endisset
+                </h4>
+            </div>
 
             @if($withInfo)
                 <button>

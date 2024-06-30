@@ -15,7 +15,9 @@ class Button extends Component
         public string $type = 'button',
         public ?string $title = '',
         public string $size = 'md',
-        public string $color = 'blue',
+        public string $color = '',
+        public bool $outlined = false,
+        public ?string $roundedSize = '',
     )
     {
         //
@@ -23,8 +25,19 @@ class Button extends Component
 
     public function getButtonClass():string
     {
-        $defaultClass = "w-full transition-colors rounded-md ";
-        return $defaultClass .' '. $this->getBackgroundClass() .' '. $this->getSizeClass();
+        $defaultClass = "w-full transition-colors ";
+        $solidButtonClass = $defaultClass .' '. $this->getRoundedSizeClass() .' '. $this->getBackgroundClass() .' '. $this->getSizeClass();
+        $outlineButtonClass = 'text-blue-600 hover:underline';
+        return $this->outlined ? $outlineButtonClass : $solidButtonClass;
+    }
+
+    public function getRoundedSizeClass(): string
+    {
+        return match ($this->roundedSize){
+            'none' => '',
+            'sm' => 'rounded',
+            default => 'rounded-md'
+        };
     }
 
     public function getBackgroundClass(): string
@@ -33,7 +46,7 @@ class Button extends Component
             'red' => 'bg-red-600 hover:bg-red-500 text-white',
             'indigo' => 'bg-indigo-600 hover:bg-indigo-500 text-white',
             'blue' => 'bg-blue-600 hover:bg-blue-500 text-white',
-            default => 'bg-slate-600 hover:bg-slate-500',
+            default => 'bg-zinc-900 hover:bg-zinc-800 text-white',
         };
     }
 

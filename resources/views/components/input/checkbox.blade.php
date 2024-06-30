@@ -6,5 +6,5 @@
         class="rounded h-4 w-4 cursor-pointer border border-gray-500"
         {{ $attributes }}>
 
-    <label for="{{ $id }}" class="text-gray-500 font-thin cursor-pointer">{{ $label }}</label>
+    <label for="{{ $id }}" class="text-gray-500 font-thin cursor-pointer text-sm">{{ $label }}</label>
 </div>
