@@ -8,6 +8,7 @@ use App\Models\Processor;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\User;
+use App\SeeMore;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -17,7 +18,7 @@ use Masmerise\Toaster\Toaster;
 #[Layout('layouts.guest')]
 class IndexGuestPage extends Component
 {
-    use WithPagination;
+    use SeeMore;
     public string $search = '';
 
     public array $selectedBrands = [];
@@ -85,15 +86,24 @@ class IndexGuestPage extends Component
             ],
             "Product Type" => [
                 'livewireModel' => 'productTypes',
-                'modelFilters' => ProductType::select('id', 'name')->withCount('products')->get(),
+                'modelFilters' => ProductType::select('id', 'name')->withCount('products')->take($this->initialAmountToLoad)->get(),
                 'withSeeMore' => false
             ],
             "Processor" => [
                 'livewireModel' => 'processors',
-                'modelFilters' => Processor::select('id', 'name')->withCount('products')->paginate(5),
-                'withSeeMore' => true
+                'modelFilters' => Processor::select('id', 'name')->withCount('products')->take($this->initialAmountToLoad)->get(),
+                'withSeeMore' => $this->showSeeMore
             ],
         ];
+    }
+
+    protected function getTotalCount(): int
+    {
+        return Processor::count();
+    }
+    public function mount()
+    {
+        $this->initialAmountToLoad = 2;
     }
 
     public function render()

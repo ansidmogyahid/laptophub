@@ -1,6 +1,6 @@
-<div class="px-3 flex">
-    <div class="max-h-screen overflow-y-auto">
-        <div class="w-74 px-2 pb-6 space-y-6 first:mt-0">
+<div class="px-3 grid grid-cols-12">
+    <div class="max-h-screen col-span-2 overflow-y-auto">
+        <div class="w-full px-2 pb-6 space-y-6 first:mt-0">
             @foreach($filters as $filterHeader => $modelFilters)
                 <x-dropdown-filter open dropdownTitle="{{ $filterHeader }}">
                     <div class="space-y-4">
@@ -10,11 +10,12 @@
                                 :name="$filter->name"
                                 label="{{ $filter->name }} ({{ $filter->products_count }})"
                                 :value="$filter->id"
+                                appendLabelClass="hover:text-red-500"
                                 wire:model.live="{{ $modelFilters['livewireModel'] }}" />
                         @endforeach
 
                         @if($modelFilters['withSeeMore'])
-                            <x-button class="text-sm" title="See More" outlined />
+                            <x-button wire:click="loadAllLeft" class="text-sm" title="See More" outlined />
                         @endif
                     </div>
                 </x-dropdown-filter>
@@ -23,7 +24,7 @@
     </div>
 
     <!-- Content -->
-    <div class="flex-1 p-5">
+    <div class="col-span-10 p-5">
         <div class="flex items-center justify-between">
 
             <div class="flex items-center mb-2">
