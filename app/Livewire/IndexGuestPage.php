@@ -4,21 +4,25 @@ namespace App\Livewire;
 
 use App\Models\Brand;
 use App\Models\Cart;
+use App\Models\Processor;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\WithPagination;
 use Masmerise\Toaster\Toaster;
 
 #[Layout('layouts.guest')]
 class IndexGuestPage extends Component
 {
+    use WithPagination;
     public string $search = '';
 
     public array $selectedBrands = [];
     public array $productTypes = [];
+    public array $processors = [];
 
     public string $layout = 'grid';
 
@@ -76,11 +80,18 @@ class IndexGuestPage extends Component
         return [
             "Brand" => [ // filter header
                 'livewireModel' => 'selectedBrands', // livewire model
-                'modelFilters' => Brand::select('id', 'name')->withCount('products')->get() // filters per filter category
+                'modelFilters' => Brand::select('id', 'name')->withCount('products')->get(), // filters per filter category
+                'withSeeMore' => false
             ],
-            "Product Types" => [
+            "Product Type" => [
                 'livewireModel' => 'productTypes',
-                'modelFilters' => ProductType::select('id', 'name')->withCount('products')->get()
+                'modelFilters' => ProductType::select('id', 'name')->withCount('products')->get(),
+                'withSeeMore' => false
+            ],
+            "Processor" => [
+                'livewireModel' => 'processors',
+                'modelFilters' => Processor::select('id', 'name')->withCount('products')->paginate(5),
+                'withSeeMore' => true
             ],
         ];
     }

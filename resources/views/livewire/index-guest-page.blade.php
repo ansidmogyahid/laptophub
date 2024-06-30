@@ -1,10 +1,9 @@
-<div class="px-10 flex">
-    <div>
-        <button wire:click="clearFilters" class="text-sm border py-1.5 hover:bg-gray-100 px-3 mt-5 w-full rounded">Clear Filters</button>
-        <div class="w-64 space-y-6 first:mt-0">
+<div class="px-3 flex">
+    <div class="max-h-screen overflow-y-auto">
+        <div class="w-74 px-2 pb-6 space-y-6 first:mt-0">
             @foreach($filters as $filterHeader => $modelFilters)
                 <x-dropdown-filter open dropdownTitle="{{ $filterHeader }}">
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         @foreach($modelFilters['modelFilters'] as $filter)
                             <x-input.checkbox
                                 :id="$filter->name"
@@ -13,6 +12,10 @@
                                 :value="$filter->id"
                                 wire:model.live="{{ $modelFilters['livewireModel'] }}" />
                         @endforeach
+
+                        @if($modelFilters['withSeeMore'])
+                            <x-button class="text-sm" title="See More" outlined />
+                        @endif
                     </div>
                 </x-dropdown-filter>
             @endforeach
@@ -58,7 +61,7 @@
                             <h3 class="font-semibold">{{ $product->name }}</h3>
                             <h4>${{ $product->price }}</h4>
 
-                            <x-button title="Add to Cart" wire:click="addToCart({{ $product->id }})" />
+                            <x-button class="py-2.5" title="Add to Cart" wire:click="addToCart({{ $product->id }})" />
                         </div>
                     </div>
                 </form>
